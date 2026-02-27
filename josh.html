@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Love Abe Ganda </title>
+<style>
+body {
+    margin: 0;
+    background: #0b0b0b;
+    font-family: Consolas, monospace;
+    color: #00ff9c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.box {
+    border: 2px solid #00ff9c;
+    padding: 25px;
+    width: 400px;
+    max-height: 80vh;
+    text-align: center;
+    box-shadow: 0 0 20px #00ff9c;
+    overflow-y: auto;
+    background: #111;
+    position: relative;
+    z-index: 2;
+}
+
+button {
+    margin-top: 20px;
+    padding: 20px 35px;
+    background: black;
+    color: #00ff9c;
+    border: 1px solid #00ff9c;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00ff9c;
+    color: black;
+}
+
+#final {
+    display: none;
+    color: white;
+    margin-top: 20px;
+    animation: fade 2s;
+    text-align: center;
+}
+
+.small-gifs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.small-gifs img {
+    width: 120px;
+}
+
+#timer {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    font-size: 20px;
+    color: #ff4d6d;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+@keyframes fade { from { opacity:0; } to { opacity:1; } }
+
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: red;
+    transform: rotate(-45deg);
+    animation: float 6s linear infinite;
+    border-radius: 50% 50% 0 0;
+    z-index:1;
+}
+
+.heart:before, .heart:after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: red;
+    border-radius: 50%;
+}
+
+.heart:before { top: -15px; left: 0; }
+.heart:after { left: 15px; top: 0; }
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
+    100% { transform: translateY(-800px) rotate(-45deg); opacity: 0; }
+}
+
+
+#fullScreenGIFs {
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 9999;
+    pointer-events: none;
+    overflow: visible;
+}
+
+#fullScreenGIFs img {
+    position: absolute;
+    width: 150px;
+    border-radius: 12px;
+    animation: explode 3s ease-out forwards;
+}
+@keyframes explode {
+    0% { transform: scale(0) translate(0,0); opacity: 0; }
+    50% { transform: scale(1.2) translate(0,0); opacity: 1; }
+    100% { transform: scale(1) translate(var(--x), var(--y)); opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div id="timer"></div>
+
+<div class="box">
+    <div id="text">⚠ ERROR: Heart not detected</div>
+    <button onclick="next()">REPAIR</button>
+
+    <div id="final">
+        <p>
+Hi, gusto ko lang sabihin kung gaano ako ka-proud sa’yo. Araw-araw nakikita ko kung gaano ka kasipag at paano mo kinakaya lahat kahit minsan pagod ka na. Please don’t pressure yourself too much. You’re already doing your best, and that’s more than enough for me. Good luck sa studies mo, alam kong kaya mo lahat ng exams, requirements, at puyat. Konting tiis pa and you’ll reach your dreams. Alam kong gusto mong maging engineer someday, at I believe sa talento at sipag mo, makakamit mo yan. Huwag kang matakot sa challenges, bawat hirap ay hakbang para sa success mo. Tandaan mo, kahit may failures o mistakes, bahagi yan ng pag-grow mo. Keep pushing and stay focused, kasi nasa tamang daan ka. At kung ever may mga time na nalulungkot ka o feeling mo mag-isa ka, nandito lang ako palagi. You can talk to me anytime, kahit walang ibang mapagsabihan. Hindi ka istorbo, at lagi akong ready makinig. Gusto kong maging pahinga mo kapag napapagod ka na. Take care of yourself, eat well, drink water, at mag-rest kapag kailangan. I believe in you so much. Kayang-kaya mo ‘yan, at I’ll always be here, silently supporting you. Siguradong magiging successful ka sa buhay, at proud na proud ako sa’yo. 💖
+        </p>
+
+        <div class="small-gifs">
+            <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+            <img src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif">
+            <img src="https://media.giphy.com/media/l4FGGafcOHmrlQxG0/giphy.gif">
+            <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
+            <img src="https://media.giphy.com/media/26FLdmIp6wJr91JAI/giphy.gif">
+        </div>
+    </div>
+</div>
+
+<div id="fullScreenGIFs"></div>
+
+<audio id="music" loop>
+    <source src="daylight.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const lines = [
+    "✔ Scanning heart drive...",
+    "✔ Love file found bebe..",
+    "✔ Installing emotions and feelings to me...",
+    "✔ Almost done yieee HAHAHAHHAHA kaylangan 60 seconds mabasa mo yan ha.."
+];
+
+let i = 0;
+
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
+
+function explodeGIFs() {
+    const gifUrls = [
+        "https://media1.tenor.com/images/cefdf7f18976b40e53e5b3f63bbbbc8c/tenor.gif?itemid=5184402",
+        "https://media.giphy.com/media/oXWwl0eUy2mNW/giphy.gif",
+        "https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif",
+        "https://media1.tenor.com/m/zDChDUnpKpAAAAAC/yellow-dragon-nailong.gif",
+        "https://www.bing.com/th/id/OGC.31a6f228b0d836bbeecec4934be70003?o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fmedia.tenor.com%2f6iqUYEgLmz0AAAAM%2fnailong-nailong-dancing.gif&ehk=hW3K%2bVyzrRW7bdnVeKV5PWUWveHzzlus6pHG7WlOBug%3d",
+        "https://media.tenor.com/mabjMYRKhwIAAAAC/i-love-you.gif"
+    ];
+
+    const container = document.getElementById("fullScreenGIFs");
+    container.style.display = "block";
+
+    for(let j=0;j<100;j++){
+        const img = document.createElement('img');
+        const url = gifUrls[Math.floor(Math.random()*gifUrls.length)];
+        img.src = url;
+        img.style.left = Math.random() * (window.innerWidth - 150) + "px";
+        img.style.top = Math.random() * (window.innerHeight - 150) + "px";
+        img.style.setProperty('--x', (Math.random()*600-300)+'px');
+        img.style.setProperty('--y', (Math.random()*600-300)+'px');
+        container.appendChild(img);
+    }
+}
+
+function next() {
+    if (i < lines.length) {
+        document.getElementById("text").innerHTML = lines[i];
+        i++;
+    } else {
+        document.getElementById("text").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        const final = document.getElementById("final");
+        final.style.display = "block";
+
+        let music = document.getElementById("music");
+        music.play().catch(() => {
+            document.body.addEventListener('click', () => { music.play(); }, {once:true});
+        });
+
+        let timeLeft = 60;
+        const timerDiv = document.getElementById("timer");
+        timerDiv.innerHTML = `Time remaining: ${timeLeft}s`;
+
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+            timerDiv.innerHTML = `Time remaining: ${timeLeft}s`;
+            if(timeLeft <= 0){
+                clearInterval(timerInterval);
+                timerDiv.innerHTML = "Time's up! 💖";
+                explodeGIFs();
+            }
+        }, 1000);
+
+        setInterval(createHeart, 500);
+    }
+}
+</script>
+
+</body>
+</html>
